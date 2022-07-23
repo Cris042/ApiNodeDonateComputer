@@ -1,9 +1,3 @@
-var express = require('express');
-var app = express();
+const app = require('./app');
 
-app.get('/', function(req, res) {
-  res.status(201).json({ alive: true }).send();
-});
-
-app.listen(3000, () => console.log("Server is running!"));
-
+app.listen(3333, () => console.log("Server is running on port 3333"));
