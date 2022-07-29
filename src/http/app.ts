@@ -2,17 +2,17 @@ import "reflect-metadata";
 import "express-async-errors";
 import express, { NextFunction, Request, Response } from "express";
 
-import { routes } from "./routes";
+import { routes } from "./routes/Index";
 
 import { requiredFieldsError } from "@errors/requiredFieldsError";
 import { appError } from "@errors/appError";
 
-const app = express();
+const App = express();
 
-app.use( express.json() );
-app.use( routes );
+App.use( express.json() );
+App.use( routes );
 
-app.use
+App.use
 (
     (err: Error, request: Request, response: Response, next: NextFunction) => 
     {
@@ -47,4 +47,4 @@ app.use
     }
 );
 
-export { app };
+export { App };

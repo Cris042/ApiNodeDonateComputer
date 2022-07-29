@@ -1,11 +1,11 @@
 import { Router } from 'express';
 
-import { CreateController } from '@useCase/donation/createController'
+import { CreateDonationController } from '@modules/donation/useCase/createDonation/CreateDonationController';
 
-const donationRoutes = Router();
-const createController  = new CreateController();
+const DonationRoutes = Router();
+const createController  = new CreateDonationController();
 
-donationRoutes.post( "/", createController.handle );
+DonationRoutes.post( "/", createController.handle );
 
 
-export { donationRoutes };
+export { DonationRoutes };

@@ -1,9 +1,9 @@
-import { app } from "@http/app";
+import { App } from "@http/App";
 import request from 'supertest';
 
-describe("criar doação", () => 
+describe("criar doação, verificar se existe algun device", () => 
 {
-  it("retornar o status 200 ", async ( ) => 
+  it("retornar o status 400 quando a quantidades de device for igual a 0", async () => 
   {
     const donation = 
     {
@@ -17,22 +17,22 @@ describe("criar doação", () =>
       number: "221",
       complement: "b",
       neighborhood: "centro",
-      deviceCount: 1,
+      deviceCount: 0,
       devices: 
       [
-        {
-          type: "notebook",
-          condition: "working",
-        }
       ]
     };
 
-    const response = await request(app)
-      .post("/donation/")
+    const response = await request(App)
+      .post("/donation")
       .send(donation)
       .set("Accept", "application/json")
-      .expect(200);
+      .expect(400);
 
-      expect(response.body.success).toBeTruthy();
+      expect(response.body.message).toBe
+      (
+        "Todos os campos obrigatórios devem ser informados"
+      );
   });
+
 });

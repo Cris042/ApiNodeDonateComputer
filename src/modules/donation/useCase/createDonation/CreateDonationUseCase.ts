@@ -1,20 +1,20 @@
-import { createdonationDTO } from "@dtos/createdonationDTO";
+import { ICreatedonationDTO } from "@modules/donation/dtos/ICreatedonationDTO";
 import { requiredFieldsError } from "@errors/requiredFieldsError";
 import { appError } from "@errors/appError";
 
 type typeDevice =
 {
   type: string; 
-  condition: string;
+  condicion: string;
 }
 
-function validateEmail( email : string ) 
+function HandleValidateEmail( email : string ) 
 {
    var re = /\S+@\S+\.\S+/;
    return re.test( email );
 }
 
-function checkRequiredFields( donation: createdonationDTO ) 
+function  HandleCheckRequiredFields( donation: ICreatedonationDTO ) 
 {
   let requiredFields: string[] = [];
 
@@ -32,7 +32,7 @@ function checkRequiredFields( donation: createdonationDTO )
  
 }
 
-function checkDevicesTypes(devices: typeDevice[]) 
+function  HandleCheckDevicesTypes(devices: typeDevice[]) 
 {
   const devicesTypes = [ "notebook", "desktop", "netbook", "monitor", "impressora","scanner"];
   const devicesCondicion = [ "working", "notWorking", "broken"];
@@ -41,13 +41,13 @@ function checkDevicesTypes(devices: typeDevice[])
   {
     if( !devicesTypes.includes( device.type ) ) 
       throw new appError( device.type + "  não e um tipo de device valido!");
-    if( !devicesCondicion.includes( device.condition ) )
-      throw new appError( device.condition + "  não e uma codinção de device valido!");
+    if( !devicesCondicion.includes( device.condicion ) )
+      throw new appError( device.condicion + "  não e uma codinção de device valido!");
   }
 }
 
 
-class createService
+class CreateDonationUseCase
 {
   async execute({
     name,
@@ -62,9 +62,9 @@ class createService
     neighborhood,
     deviceCount,
     devices
-  }: createdonationDTO )
+  }: ICreatedonationDTO )
   {
-    const donation: createdonationDTO = 
+    const donation: ICreatedonationDTO = 
     {
       name,
       phone,
@@ -80,7 +80,7 @@ class createService
       devices,
     }
    
-    const checkFilds = checkRequiredFields( donation );
+    const checkFilds =  HandleCheckRequiredFields( donation );
 
     if( checkFilds.length > 0 )
     {
@@ -100,7 +100,7 @@ class createService
         );
     }
 
-    if( email != null && validateEmail( email ) == false )
+    if( email != null &&  HandleValidateEmail( email ) == false )
     {
         throw new appError
         (
@@ -108,9 +108,9 @@ class createService
         );
     }
 
-    checkDevicesTypes( devices );
+    HandleCheckDevicesTypes( devices );
     
   }
 }
 
-export { createService };
+export { CreateDonationUseCase };

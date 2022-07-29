@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { createService } from "@useCase/donation/createService";
+import { CreateDonationUseCase } from "@modules/donation/useCase/createDonation/CreateDonationUseCase";
 
-class CreateController 
+class CreateDonationController 
 {
   async handle( request: Request, response: Response ): Promise<Response> 
   {
@@ -13,9 +13,9 @@ class CreateController
       name, email, phone, zip, city, state, streetAddress, number, complement, neighborhood, deviceCount, devices 
     } = request.body;
 
-    const createServiceObj = container.resolve( createService );  
+    const CreateDonationObj = container.resolve( CreateDonationUseCase );  
     
-    await createServiceObj.execute
+    await CreateDonationObj.execute
     ({ 
       name,
       email,
@@ -36,5 +36,5 @@ class CreateController
   } 
 }
 
-export { CreateController  };
+export { CreateDonationController };
 

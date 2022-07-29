@@ -4,9 +4,9 @@
     "module": "commonjs",
     "rootDir": "./",
     "baseUrl": "./src",
-    "paths": {
-      "@useCase/*": ["useCase/*"],
-      "@dtos/*": ["dtos/*"],
+    "paths": 
+    {
+      "@modules/*": ["modules/*"],
       "@http/*": ["http/*"],
       "@errors/*" : ["errors/*"]
     },                          

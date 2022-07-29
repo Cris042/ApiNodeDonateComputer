@@ -1,10 +1,10 @@
 type device = 
 {
     type: string;
-    condition: string;
+    condicion: string;
 };
   
-interface createdonationDTO
+interface ICreatedonationDTO
 {
     name: string;
     email?: string;
@@ -20,4 +20,4 @@ interface createdonationDTO
     devices: device[];
 }
 
-export { createdonationDTO };
+export { ICreatedonationDTO };

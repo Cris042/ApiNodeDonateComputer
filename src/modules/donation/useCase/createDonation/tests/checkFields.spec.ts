@@ -1,4 +1,4 @@
-import { app } from "@http/app";
+import { App } from "@http/App";
 import request from 'supertest';
 
 describe("criar doação, verificar se existe algun campo vazio", () => 
@@ -20,12 +20,12 @@ describe("criar doação, verificar se existe algun campo vazio", () =>
       [
         {
           type: "notebook",
-          condition: "working",
+          condicion: "working",
         }
       ]
     };
 
-    const response = await request(app)
+    const response = await request(App)
       .post("/donation")
       .send(donation)
       .set("Accept", "application/json")
