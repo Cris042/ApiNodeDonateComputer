@@ -42,7 +42,7 @@ function checkDevicesTypes(devices: typeDevice[])
     if( !devicesTypes.includes( device.type ) ) 
       throw new appError( device.type + "  não e um tipo de device valido!");
     if( !devicesCondicion.includes( device.condicion ) )
-      throw new appError( device.condition + "  não e uma codinção de device valido!");
+      throw new appError( device.condicion + "  não e uma codinção de device valido!");
   }
 }
 
