@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { CreateDonationUseCase } from "@modules/donation/useCase/createDonation/CreateDonationUseCase";
+import { CreateDonationUseCase } from "@modules/donation/useCase/createDonation/createDonationUseCase";
 
 class CreateDonationController 
 {

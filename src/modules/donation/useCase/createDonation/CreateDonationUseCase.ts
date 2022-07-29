@@ -1,4 +1,4 @@
-import { ICreatedonationDTO } from "@modules/donation/dtos/ICreatedonationDTO";
+import { ICreatedonationDTO } from "@modules/donation/dtos/IcreatedonationDTO";
 import { requiredFieldsError } from "@errors/requiredFieldsError";
 import { appError } from "@errors/appError";
 

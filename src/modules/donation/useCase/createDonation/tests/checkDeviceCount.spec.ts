@@ -1,4 +1,4 @@
-import { App } from "@http/App";
+import { App } from "@http/app";
 import request from 'supertest';
 
 describe("criar doação, verificar se o numero de devices esta iqual a quantidade de devices", () => 

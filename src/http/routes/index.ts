@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { DonationRoutes } from "./Donation.routes";
+import { DonationRoutes } from "./donation.routes";
 
 const routes = Router();
 

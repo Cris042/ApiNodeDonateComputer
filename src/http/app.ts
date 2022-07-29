@@ -2,7 +2,7 @@ import "reflect-metadata";
 import "express-async-errors";
 import express, { NextFunction, Request, Response } from "express";
 
-import { routes } from "./routes/Index";
+import { routes } from "./routes/index";
 
 import { requiredFieldsError } from "@errors/requiredFieldsError";
 import { appError } from "@errors/appError";

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { CreateDonationController } from '@modules/donation/useCase/createDonation/CreateDonationController';
+import { CreateDonationController } from '@modules/donation/useCase/createDonation/createDonationController';
 
 const DonationRoutes = Router();
 const createController  = new CreateDonationController();
