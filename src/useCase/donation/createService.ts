@@ -5,7 +5,7 @@ import { appError } from "@errors/appError";
 type typeDevice =
 {
   type: string; 
-  condition: string;
+  condicion: string;
 }
 
 function validateEmail( email : string ) 
@@ -41,7 +41,7 @@ function checkDevicesTypes(devices: typeDevice[])
   {
     if( !devicesTypes.includes( device.type ) ) 
       throw new appError( device.type + "  não e um tipo de device valido!");
-    if( !devicesCondicion.includes( device.condition ) )
+    if( !devicesCondicion.includes( device.condicion ) )
       throw new appError( device.condition + "  não e uma codinção de device valido!");
   }
 }
