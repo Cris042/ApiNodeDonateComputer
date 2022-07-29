@@ -47,4 +47,9 @@ app.use
     }
 );
 
+app.get('/', function(req, res) {
+  res.status(201).json({ alive: true }).send();
+});
+
+
 export { app };
