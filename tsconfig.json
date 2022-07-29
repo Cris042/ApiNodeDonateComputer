@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "rootDir": "./",
+    "baseUrl": "./src",
+    "paths": {
+      "@useCase/*": ["useCase/*"],
+      "@dtos/*": ["dtos/*"],
+      "@http/*": ["http/*"],
+      "@errors/*" : ["errors/*"]
+    },                          
+    "esModuleInterop": true,   
+    "experimentalDecorators": true,   
+    "emitDecoratorMetadata": true,              
+    "skipLibCheck": true,            
+    "forceConsistentCasingInFileNames": true,  
+    "resolveJsonModule": true
+  }
+}
