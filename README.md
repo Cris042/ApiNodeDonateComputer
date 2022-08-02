@@ -14,7 +14,7 @@
 ## Inicializar projeto
 
 1. Run `yarn`.<br />
-2. Run `yarn dev`.<br />
+2. Run `yarn start`.<br />
 
 ## Testa projeto
 

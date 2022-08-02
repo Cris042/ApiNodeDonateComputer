@@ -1,6 +1,6 @@
 import { ICreatedonationDTO } from "@modules/donation/dtos/ICreatedonationDTO";
-import { requiredFieldsError } from "@errors/requiredFieldsError";
 import { appError } from "@errors/appError";
+import * as EmailValidator from 'email-validator';
 
 type typeDevice =
 {
@@ -10,8 +10,7 @@ type typeDevice =
 
 function HandleValidateEmail( email : string ) 
 {
-   var re = /\S+@\S+\.\S+/;
-   return re.test( email );
+   return EmailValidator.validate( email );
 }
 
 function  HandleCheckRequiredFields( donation: ICreatedonationDTO ) 
@@ -39,10 +38,10 @@ function  HandleCheckDevicesTypes(devices: typeDevice[])
 
   for (let device of devices) 
   {
-    if( !devicesTypes.includes( device.type ) ) 
-      throw new appError( device.type + "  não e um tipo de device valido!");
-    if( !devicesCondicion.includes( device.condicion ) )
-      throw new appError( device.condicion + "  não e uma codinção de device valido!");
+    if( !devicesTypes.includes( device.type.toLocaleLowerCase() ) ) 
+      throw new appError( device.type.toLocaleLowerCase() + "  não e um tipo de device valido!");
+    if( !devicesCondicion.includes( device.condicion.toLocaleLowerCase() ) )
+      throw new appError( device.condicion.toLocaleLowerCase() + "  não e uma codinção de device valido!");
   }
 }
 
@@ -84,27 +83,27 @@ class CreateDonationUseCase
 
     if( checkFilds.length > 0 )
     {
-        throw new requiredFieldsError
+        throw new appError
         (
            "Todos os campos obrigatórios devem ser informados",
            checkFilds
         )
     }
     
+    if( email != null &&  await HandleValidateEmail(email) == false )
+    {
+        throw new appError
+        (
+          "E-mail invalido!"
+        );
+    }
+
     if( deviceCount != devices.length )
     {
         throw new appError
         (
            "A quantidade de equipamentos : " + deviceCount + 
            "  não está de acordo com as informações de equipamentos enviados : " + devices.length
-        );
-    }
-
-    if( email != null &&  HandleValidateEmail( email ) == false )
-    {
-        throw new appError
-        (
-          "E-mail invalido!"
         );
     }
 

@@ -10,25 +10,14 @@ class CreateDonationController
 
     const 
     { 
-      name, email, phone, zip, city, state, streetAddress, number, complement, neighborhood, deviceCount, devices 
+       name, email, phone, zip, city, state, streetAddress, number, complement, neighborhood, deviceCount, devices 
     } = request.body;
 
     const CreateDonationObj = container.resolve( CreateDonationUseCase );  
     
     await CreateDonationObj.execute
     ({ 
-      name,
-      email,
-      phone,
-      zip,
-      city,
-      state,
-      streetAddress,
-      number,
-      complement,
-      neighborhood,
-      deviceCount,
-      devices
+       name, email, phone, zip, city, state, streetAddress, number, complement, neighborhood, deviceCount, devices
     }); 
 
     return response.status(200).json({ success: true }).send();
