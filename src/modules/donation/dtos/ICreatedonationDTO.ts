@@ -1,14 +1,6 @@
-type device = 
+interface ICreateDonationDTO
 {
-    type: string;
-    condicion: string;
-};
-  
-interface ICreatedonationDTO
-{
-    name: string;
-    email?: string;
-    phone: string;
+    keyUser?: string
     zip: string;
     city: string;
     state: string;
@@ -16,8 +8,7 @@ interface ICreatedonationDTO
     number: number;
     complement?: string;
     neighborhood: string;
-    deviceCount: number;
-    devices: device[];
+    deviceCount: number;   
 }
 
-export { ICreatedonationDTO };
+export { ICreateDonationDTO };

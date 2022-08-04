@@ -1,37 +1,23 @@
-import { ICreatedonationDTO } from "@modules/donation/dtos/ICreatedonationDTO";
+import { ICreateDonationDTO } from "@modules/donation/dtos/ICreatedonationDTO";
 import { prisma } from '@database/prismaClient';
-import * as EmailValidator from 'email-validator';
 import { appError } from "@errors/appError";
 import * as Yup from 'yup';
 
-type ItypeDevice =
-{
-  type: string; 
-  condicion: string;
-  id_donation?: string;
-}
-
-function HandleValidateEmail( email : string ) 
-{
-   return EmailValidator.validate( email );
-}
-
-async function HandleCheckInputType( donation : ICreatedonationDTO )
+async function HandleCheckInputType( donation : ICreateDonationDTO )
 {
   let isValid = true;
   let messageError = " ";
 
   let schema = Yup.object().shape
   ({
-    name: Yup.string().min(3),
-    phone: Yup.string().min(10).max(18),
-    zip: Yup.string().min(8).max(10),
-    city: Yup.string().min(3),
-    state: Yup.string().min(3),
-    streetAddress: Yup.string().min(3),
-    number: Yup.number().positive("O campo 'number' deve ser positivo.").integer("O campo deve ser um número inteiro."),
-    neighborhood: Yup.string().min(3),
-    deviceCount: Yup.number().positive("O campo 'deviceCount' deve ser positivo.").integer("O campo deve ser um número inteiro"),
+    zip: Yup.string().required().min(8).max(10),
+    city: Yup.string().required().min(3),
+    state: Yup.string().required().min(3),
+    streetAddress: Yup.string().required().min(3),
+    number: Yup.number().required().positive("O campo 'number' deve ser positivo.").integer("O campo deve ser um número inteiro."),
+    complement : Yup.string().notRequired().min(3),
+    neighborhood: Yup.string().required().min(3),
+    deviceCount: Yup.number().required().positive("O campo 'deviceCount' deve ser positivo.").integer("O campo deve ser um número inteiro"),
   });
 
   try 
@@ -39,7 +25,7 @@ async function HandleCheckInputType( donation : ICreatedonationDTO )
     await schema.validate
     (
       { 
-        name : donation.name, phone : donation.phone, zip: donation.zip, city : donation.city, state : donation.state, streetAddress : donation.streetAddress, 
+        zip: donation.zip, city : donation.city, state : donation.state, streetAddress : donation.streetAddress, 
         number : donation.number, neighborhood : donation.neighborhood, deviceCount: donation.deviceCount 
       }
     );
@@ -54,42 +40,10 @@ async function HandleCheckInputType( donation : ICreatedonationDTO )
 
 }
 
-function  HandleCheckRequiredFields( donation: ICreatedonationDTO ) 
-{
-  let requiredFields: string[] = [];
-
-  for (let item in donation) 
-  {
-    if( !donation[item] && item !== "email" && item !== "complement")    
-       requiredFields.push(item);    
-  }
-
-  if( donation.devices.length === 0 ) 
-      requiredFields.push("devices");
-
-  return requiredFields;
-}
-
-function  HandleCheckDevicesTypes( devices: ItypeDevice[] ) 
-{
-  const devicesTypes = [ "notebook", "desktop", "netbook", "monitor", "impressora","scanner"];
-  const devicesCondicion = [ "working", "notworking", "broken"];
-
-  for (let device of devices) 
-  {
-    if( !devicesTypes.includes( device.type.toLocaleLowerCase() ) ) 
-      throw new appError( device.type.toLocaleLowerCase() + "  não e um tipo de device valido!");
-    if( !devicesCondicion.includes( device.condicion.toLocaleLowerCase() ) )
-      throw new appError( device.condicion.toLocaleLowerCase() + "  não e uma codinção de device valido!");
-  }
-}
-
 class CreateDonationUseCase
 {
   async execute({
-    name,
-    email,
-    phone,
+    keyUser,
     zip,
     city,
     state,
@@ -97,15 +51,12 @@ class CreateDonationUseCase
     number,
     complement,
     neighborhood,
-    deviceCount,
-    devices
-  }: ICreatedonationDTO )
+    deviceCount, 
+  }: ICreateDonationDTO )
   {
-    const donation: ICreatedonationDTO = 
-    {
-      name,
-      phone,
-      email,
+    const donation: ICreateDonationDTO = 
+    { 
+      keyUser,
       zip,
       city,
       state,
@@ -113,73 +64,22 @@ class CreateDonationUseCase
       number,
       neighborhood,
       complement,
-      deviceCount,
-      devices,
+      deviceCount,  
     }
    
-    const checkFilds =  HandleCheckRequiredFields( donation );
-
-    if( checkFilds.length > 0 )
-    {
-        throw new appError
-        (
-           "Todos os campos obrigatórios devem ser informados",
-           checkFilds
-        )
-    }
-
     const response = HandleCheckInputType( donation );
 
     if( (await response).isValid == false )
     {
         throw new appError
         (
-          "Dados Invalidos!" + (await response).messageError
+          "Dados Invalidos!" +"  "+ (await response).messageError
         );
     }
-    
-    if( email != null && HandleValidateEmail(email) == false )
-    {
-        throw new appError
-        (
-          "E-mail invalido!"
-        );
-    }
-
-    if( deviceCount != devices.length )
-    {
-        throw new appError
-        (
-           "A quantidade de equipamentos : " + deviceCount + 
-           "  não está de acordo com as informações de equipamentos enviados : " + devices.length
-        );
-    }
-
-    HandleCheckDevicesTypes( devices );
-
-    const userExists = await prisma.user.findFirst({
-      where: {
-        phone: {
-          equals: phone,
-          mode: 'insensitive',
-        },
-      },
-    });
-
-    if( !userExists )
-    {
-        await prisma.user.create({
-          data: {
-            name: donation.name,
-            email: donation.email,
-            phone: donation.phone,
-          },
-        })
-    }
-
+      
     const objDonation = await prisma.donation.create({
       data: {
-        key_user: donation.phone,
+        key_user: donation.keyUser,
         zip: donation.zip,
         city: donation.city,
         state: donation.state,
@@ -191,18 +91,7 @@ class CreateDonationUseCase
       },
     });
 
-    for (let item in donation.devices) 
-    {
-      await prisma.devices.create
-      ({    
-        data: 
-        {    
-          id_donation : objDonation.id,
-          type: donation.devices[item].type,
-          condicion: donation.devices[item].condicion,   
-        },
-      });
-    }
+    return objDonation.id;
   
   }
 }
