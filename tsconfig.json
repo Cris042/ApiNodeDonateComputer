@@ -9,7 +9,7 @@
       "@modules/*": ["modules/*"],
       "@http/*": ["http/*"],
       "@errors/*" : ["errors/*"],
-      "@databases/*": ["databases/*"]
+      "@database/*": ["database/*"]
     },                          
     "esModuleInterop": true,   
     "experimentalDecorators": true,   

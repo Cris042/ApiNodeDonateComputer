@@ -11,6 +11,10 @@
 - [x] node 
 - [x] yarn  
 
+
+## Inicializar BD
+
+1. Run `npx prisma db push --preview-feature`.<br />
 ## Inicializar projeto
 
 1. Run `yarn`.<br />

@@ -1,12 +1,14 @@
 import { ICreatedonationDTO } from "@modules/donation/dtos/ICreatedonationDTO";
+import { prisma } from '@database/prismaClient';
 import * as EmailValidator from 'email-validator';
 import { appError } from "@errors/appError";
 import * as Yup from 'yup';
 
-type typeDevice =
+type ItypeDevice =
 {
   type: string; 
   condicion: string;
+  id_donation?: string;
 }
 
 function HandleValidateEmail( email : string ) 
@@ -68,10 +70,10 @@ function  HandleCheckRequiredFields( donation: ICreatedonationDTO )
   return requiredFields;
 }
 
-function  HandleCheckDevicesTypes(devices: typeDevice[]) 
+function  HandleCheckDevicesTypes( devices: ItypeDevice[] ) 
 {
   const devicesTypes = [ "notebook", "desktop", "netbook", "monitor", "impressora","scanner"];
-  const devicesCondicion = [ "working", "notWorking", "broken"];
+  const devicesCondicion = [ "working", "notworking", "broken"];
 
   for (let device of devices) 
   {
@@ -81,7 +83,6 @@ function  HandleCheckDevicesTypes(devices: typeDevice[])
       throw new appError( device.condicion.toLocaleLowerCase() + "  não e uma codinção de device valido!");
   }
 }
-
 
 class CreateDonationUseCase
 {
@@ -155,7 +156,54 @@ class CreateDonationUseCase
     }
 
     HandleCheckDevicesTypes( devices );
-    
+
+    const userExists = await prisma.user.findFirst({
+      where: {
+        phone: {
+          equals: phone,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    if( !userExists )
+    {
+        await prisma.user.create({
+          data: {
+            name: donation.name,
+            email: donation.email,
+            phone: donation.phone,
+          },
+        })
+    }
+
+    const objDonation = await prisma.donation.create({
+      data: {
+        key_user: donation.phone,
+        zip: donation.zip,
+        city: donation.city,
+        state: donation.state,
+        streetAddress: donation.streetAddress,
+        number: String( donation.number ),
+        neighborhood : donation.neighborhood,
+        complement : donation.complement,
+        deviceCount : String( donation.deviceCount ),
+      },
+    });
+
+    for (let item in donation.devices) 
+    {
+      await prisma.devices.create
+      ({    
+        data: 
+        {    
+          id_donation : objDonation.id,
+          type: donation.devices[item].type,
+          condicion: donation.devices[item].condicion,   
+        },
+      });
+    }
+  
   }
 }
 

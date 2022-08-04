@@ -1,0 +1,51 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String
+  phone String @unique
+
+  donation Donation[]
+
+  @@map("user")
+}
+
+model Donation {
+  id String @id @default(uuid())
+  key_user String
+  user User @relation(fields: [key_user], references: [phone])
+  zip String
+  city String
+  state String
+  streetAddress String
+  number String
+  complement String
+  neighborhood String
+  deviceCount String
+  created_at DateTime @default(now())
+
+  devices Devices[]
+
+  @@map("donation")
+}
+
+
+model Devices {
+  id String  @id @default(uuid())
+  id_donation String
+  donation Donation @relation(fields: [id_donation], references: [id])
+  type String 
+  condicion String
+  created_at DateTime @default(now())
+ 
+  @@map("devices")
+}
