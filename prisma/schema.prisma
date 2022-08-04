@@ -28,7 +28,7 @@ model Donation {
   state String
   streetAddress String
   number String
-  complement String
+  complement String 
   neighborhood String
   deviceCount String
   created_at DateTime @default(now())

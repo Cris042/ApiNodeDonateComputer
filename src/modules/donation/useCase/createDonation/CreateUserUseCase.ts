@@ -4,9 +4,17 @@ import * as EmailValidator from 'email-validator';
 import { appError } from "@errors/appError";
 import * as Yup from 'yup';
 
-function HandleValidateEmail( email : string ) 
+function  HandleCheckRequiredFields( user: ICreateUserDTO ) 
 {
-   return EmailValidator.validate( email );
+  let requiredFields: string[] = [];
+
+  for (let item in user) 
+  {
+    if( !user[item] && item !== "email")    
+       requiredFields.push(item);    
+  }
+
+  return requiredFields;
 }
 
 async function HandleCheckInputType( user : ICreateUserDTO )
@@ -16,9 +24,9 @@ async function HandleCheckInputType( user : ICreateUserDTO )
 
   let schema = Yup.object().shape
   ({
-    name: Yup.string().required().min(3),
+    name: Yup.string().min(3),
     email: Yup.string().notRequired(),
-    phone: Yup.string().required().min(10).max(18),
+    phone: Yup.string().min(10).max(18),
   });
 
   try 
@@ -26,7 +34,7 @@ async function HandleCheckInputType( user : ICreateUserDTO )
     await schema.validate
     (
       { 
-        name : user.name, phone : user.phone
+        name : user.name,email : user.email, phone : user.phone
       }
     );
   }
@@ -40,6 +48,10 @@ async function HandleCheckInputType( user : ICreateUserDTO )
 
 }
 
+function HandleValidateEmail( email : string ) 
+{
+   return EmailValidator.validate( email );
+}
 class CreateUserUseCase
 {
   async execute({
@@ -48,20 +60,29 @@ class CreateUserUseCase
     phone
   }: ICreateUserDTO )
   {
-    const donation: ICreateUserDTO = 
+    const user: ICreateUserDTO = 
     { 
         name,
         email,
         phone
     }
    
-    const response = HandleCheckInputType( donation );
-
-    if( (await response).isValid == false )
+    const checkFilds =  HandleCheckRequiredFields( user );
+    if( checkFilds.length > 0 )
     {
         throw new appError
         (
-          "Dados Invalidos!" +"  "+ (await response).messageError
+          "Todos os campos obrigatórios de informações pessoais devem ser informados",
+           checkFilds
+        )
+    }
+
+    const responseType = HandleCheckInputType( user );
+    if( (await responseType).isValid == false )
+    {
+        throw new appError
+        (
+          "Dados Invalidos!" +"  "+ (await responseType).messageError
         );
     }
     
@@ -81,17 +102,24 @@ class CreateUserUseCase
         },
       },
     });
+  
+    let response = [];
 
     if( !userExists )
     {
-        await prisma.user.create({
-          data: {
-            name: donation.name,
-            email: donation.email,
-            phone: donation.phone,
-          },
-        })
+      let objUser = await prisma.user.create({
+        data: 
+        {
+          name: user.name,
+          email: user.email != null ? user.email : null,
+          phone: user.phone,
+        },
+      })
+       
+      response.push( objUser.id );
     }
+
+    return response;
   
   }
 }

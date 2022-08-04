@@ -3,6 +3,19 @@ import { prisma } from '@database/prismaClient';
 import { appError } from "@errors/appError";
 import * as Yup from 'yup';
 
+function  HandleCheckRequiredFields(donation: ICreateDonationDTO ) 
+{
+  let requiredFields: string[] = [];
+
+  for (let item in donation) 
+  {
+    if( !donation[item] && item !== "complement")    
+       requiredFields.push(item);    
+  }
+
+  return requiredFields;
+}
+
 async function HandleCheckInputType( donation : ICreateDonationDTO )
 {
   let isValid = true;
@@ -10,14 +23,14 @@ async function HandleCheckInputType( donation : ICreateDonationDTO )
 
   let schema = Yup.object().shape
   ({
-    zip: Yup.string().required().min(8).max(10),
-    city: Yup.string().required().min(3),
-    state: Yup.string().required().min(3),
-    streetAddress: Yup.string().required().min(3),
-    number: Yup.number().required().positive("O campo 'number' deve ser positivo.").integer("O campo deve ser um número inteiro."),
-    complement : Yup.string().notRequired().min(3),
-    neighborhood: Yup.string().required().min(3),
-    deviceCount: Yup.number().required().positive("O campo 'deviceCount' deve ser positivo.").integer("O campo deve ser um número inteiro"),
+    zip: Yup.string().min(8).max(10),
+    city: Yup.string().min(3),
+    state: Yup.string().min(3),
+    streetAddress: Yup.string().min(3),
+    number: Yup.number().positive("O campo 'number' deve ser positivo.").integer("O campo deve ser um número inteiro."),
+    complement : Yup.string().notRequired().min(1),
+    neighborhood: Yup.string().min(3),
+    deviceCount: Yup.number().positive("O campo 'deviceCount' deve ser positivo.").integer("O campo deve ser um número inteiro"),
   });
 
   try 
@@ -26,7 +39,7 @@ async function HandleCheckInputType( donation : ICreateDonationDTO )
     (
       { 
         zip: donation.zip, city : donation.city, state : donation.state, streetAddress : donation.streetAddress, 
-        number : donation.number, neighborhood : donation.neighborhood, deviceCount: donation.deviceCount 
+        number : donation.number, complement : donation.complement, neighborhood : donation.neighborhood, deviceCount: donation.deviceCount 
       }
     );
   }
@@ -39,7 +52,6 @@ async function HandleCheckInputType( donation : ICreateDonationDTO )
   return { isValid, messageError }
 
 }
-
 class CreateDonationUseCase
 {
   async execute({
@@ -66,19 +78,29 @@ class CreateDonationUseCase
       complement,
       deviceCount,  
     }
-   
-    const response = HandleCheckInputType( donation );
-
-    if( (await response).isValid == false )
+     
+    const checkFilds =  HandleCheckRequiredFields( donation );
+    if( checkFilds.length > 0 )
     {
         throw new appError
         (
-          "Dados Invalidos!" +"  "+ (await response).messageError
+           "Todos os campos obrigatórios de doações devem ser informados",
+           checkFilds
+        )
+    }
+
+    const responseType = HandleCheckInputType( donation );
+    if( (await responseType).isValid == false )
+    {
+        throw new appError
+        (
+          "Dados Invalidos!" +"  "+ (await responseType).messageError
         );
     }
       
     const objDonation = await prisma.donation.create({
-      data: {
+      data: 
+      {
         key_user: donation.keyUser,
         zip: donation.zip,
         city: donation.city,
@@ -86,7 +108,7 @@ class CreateDonationUseCase
         streetAddress: donation.streetAddress,
         number: String( donation.number ),
         neighborhood : donation.neighborhood,
-        complement : donation.complement,
+        complement : donation.complement !== undefined ? donation.complement : "",
         deviceCount : String( donation.deviceCount ),
       },
     });

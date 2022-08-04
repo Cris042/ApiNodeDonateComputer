@@ -33,16 +33,15 @@ class CreateDevicesUseCase
      devices,
      deviceCount,
      idDonation
-  } )
+  })
   {  
 
     const checkFilds =  HandleCheckRequiredFields( devices );
-
     if( checkFilds.length > 0 )
     {
         throw new appError
         (
-           "Todos os campos obrigatórios devem ser informados",
+           "Todos os campos origatórios de devices devem ser informados",
            checkFilds
         )
     }
@@ -58,9 +57,11 @@ class CreateDevicesUseCase
 
     HandleCheckDevicesTypes( devices );
 
+    let response = [];
+
     for (let item in devices) 
     {
-      await prisma.devices.create
+      let objDevices = await prisma.devices.create
       ({    
         data: 
         {    
@@ -69,8 +70,11 @@ class CreateDevicesUseCase
           condicion: devices[item].condicion,   
         },
       });
+
+      response.push( objDevices.id_donation );
     }
 
+    return response;
   
   }
 }

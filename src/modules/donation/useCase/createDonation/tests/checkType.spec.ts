@@ -8,12 +8,14 @@ describe("criar doação, verificar se o tipo do device", () =>
     const donation = 
     {
       name: "teste",
+      email: "teste@email.com",
       phone: "(77) 7777-7777",
       zip: "7777-777",
       city: "Westminster",
       state: "Londres",
       streetAddress: "Baker Street",
       number: "221",
+      complement: "b",
       neighborhood: "centro",
       deviceCount: 1,
       devices: 

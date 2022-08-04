@@ -32,7 +32,7 @@ describe("criar doação, verificar se existe algun campo vazio", () =>
       .expect(400);
 
       expect(response.body.message).toBe(
-        "Todos os campos obrigatórios devem ser informados"
+        "Todos os campos obrigatórios de informações pessoais devem ser informados"
       );
   });
   

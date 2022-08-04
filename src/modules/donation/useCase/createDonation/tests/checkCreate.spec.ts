@@ -32,7 +32,5 @@ describe("criar doação", () =>
       .send(donation)
       .set("Accept", "application/json")
       .expect(200);
-
-      expect(response.body.success).toBeTruthy();
   });
 });

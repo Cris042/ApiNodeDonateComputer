@@ -18,7 +18,7 @@ class CreateDonationController
     const CreateUserUseCaseObj = container.resolve( CreateUserUseCase );
     const CreateDevicesUseCaseObj = container.resolve( CreateDevicesUseCase );
 
-    await CreateUserUseCaseObj.execute
+    const reponseUse = await CreateUserUseCaseObj.execute
     ({
        name, email, phone
     })
@@ -28,12 +28,21 @@ class CreateDonationController
        keyUser : phone, zip, city, state, streetAddress, number, complement, neighborhood, deviceCount
     }); 
 
-    await CreateDevicesUseCaseObj.execute
+    const responseDevices = await CreateDevicesUseCaseObj.execute
     ({ 
        devices,deviceCount, idDonation : responseDonation
     })
 
-    return response.status(200).json({ success: true }).send();
+    let alertCreate = [];
+
+    if( reponseUse.length != 0 ) 
+      alertCreate.push( "Usuarios criados  : " + reponseUse );
+   
+    alertCreate.push("Doações criadas :  " + responseDonation );
+    alertCreate.push("Devices criados :  " + responseDevices );
+
+
+    return response.status(200).json({ alertCreate }).send();
 
   } 
 }
