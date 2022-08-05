@@ -3,6 +3,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// não conseguir o dotenv aqui, pois creio que o prisma nao permita ja que eles ja consegem pegar as variaves de ambiente de forma nativa.
+// mas eu configurei para pode usar o dontenv quando for necessario, eu deixai um console.log no 'server.ts' caso voces queiram verificar
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")

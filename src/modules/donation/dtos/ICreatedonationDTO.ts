@@ -5,7 +5,7 @@ interface ICreateDonationDTO
     city: string;
     state: string;
     streetAddress: string;
-    number: number;
+    number: string;
     complement?: string;
     neighborhood: string;
     deviceCount: number;   

@@ -3,6 +3,7 @@ import { prisma } from '@database/prismaClient';
 import { appError } from "@errors/appError";
 import * as Yup from 'yup';
 
+//função para verificar se o campos origatorios foram preencidos
 function  HandleCheckRequiredFields(donation: ICreateDonationDTO ) 
 {
   let requiredFields: string[] = [];
@@ -16,6 +17,7 @@ function  HandleCheckRequiredFields(donation: ICreateDonationDTO )
   return requiredFields;
 }
 
+//função para verificar se os campos obrigatorios foram enviado no formato certo 
 async function HandleCheckInputType( donation : ICreateDonationDTO )
 {
   let isValid = true;
@@ -25,9 +27,9 @@ async function HandleCheckInputType( donation : ICreateDonationDTO )
   ({
     zip: Yup.string().min(8).max(10),
     city: Yup.string().min(3),
-    state: Yup.string().min(3),
+    state: Yup.string().min(2),
     streetAddress: Yup.string().min(3),
-    number: Yup.number().positive("O campo 'number' deve ser positivo.").integer("O campo deve ser um número inteiro."),
+    number: Yup.number().min(0),
     complement : Yup.string().notRequired().min(1),
     neighborhood: Yup.string().min(3),
     deviceCount: Yup.number().positive("O campo 'deviceCount' deve ser positivo.").integer("O campo deve ser um número inteiro"),
@@ -66,6 +68,7 @@ class CreateDonationUseCase
     deviceCount, 
   }: ICreateDonationDTO )
   {
+    //criadno objeto com base no DTO
     const donation: ICreateDonationDTO = 
     { 
       keyUser,
@@ -98,6 +101,7 @@ class CreateDonationUseCase
         );
     }
       
+    //criando a doação no banco de dados
     const objDonation = await prisma.donation.create({
       data: 
       {

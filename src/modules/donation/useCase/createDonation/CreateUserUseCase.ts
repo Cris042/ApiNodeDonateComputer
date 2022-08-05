@@ -4,6 +4,7 @@ import * as EmailValidator from 'email-validator';
 import { appError } from "@errors/appError";
 import * as Yup from 'yup';
 
+//função para verificar se o campos origatorios foram preencidos
 function  HandleCheckRequiredFields( user: ICreateUserDTO ) 
 {
   let requiredFields: string[] = [];
@@ -17,6 +18,7 @@ function  HandleCheckRequiredFields( user: ICreateUserDTO )
   return requiredFields;
 }
 
+//função para verificar se os campos obrigatorios foram enviado no formato certo 
 async function HandleCheckInputType( user : ICreateUserDTO )
 {
   let isValid = true;
@@ -60,6 +62,7 @@ class CreateUserUseCase
     phone
   }: ICreateUserDTO )
   {
+    //criadno objeto com base no DTO
     const user: ICreateUserDTO = 
     { 
         name,
@@ -94,6 +97,7 @@ class CreateUserUseCase
         );
     }
 
+    //criando o usuario no banco de dados
     const userExists = await prisma.user.findFirst({
       where: {
         phone: {

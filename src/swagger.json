@@ -1,0 +1,92 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Api Documentation",
+      "description": "This is an API Rent",
+      "version": "1.0.0"
+    },
+    "paths": {  
+        "/donation/": {
+            "post": {
+              "tags": ["Cria doação"],
+              "summary": "Cria doação",
+              "description": "Cria doação",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "email": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "zip": { "type": "string" },
+                        "city": { "type": "string" },
+                        "state": { "type": "string" },
+                        "streetAddress": { "type": "string" },
+                        "number" : { "type": "string" },
+                        "complement": { "type": "string" },
+                        "neighborhood": { "type": "string" },
+                        "deviceCount": { "type": "number" },
+                        "devices": { "type": "array", "items": { "type": "object" }}                    
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": 
+              {
+                "200": { 
+                  "description": "Success"
+                },
+                "400": {
+                  "description": "Erro!"
+                }
+              }
+            }
+        },
+        "/donation": {
+            "get": {
+              "tags": ["Lista doação"],
+              "summary": "Lista doação",
+              "description": "Lista doação",
+              "responses": {
+                "200": {
+                  "description": "Success",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": { "type": "string" },
+                            "email": { "type": "string" },
+                            "phone": { "type": "string" },
+                            "zip": { "type": "string" },
+                            "city": { "type": "string" },
+                            "state": { "type": "string" },
+                            "streetAddress": { "type": "string" },
+                            "number" : { "type": "string" },
+                            "complement": { "type": "string" },
+                            "neighborhood": { "type": "string" },
+                            "deviceCount": { "type": "number" },
+                            "devices": 
+                            [
+                              {
+                                "type": { "type": "string" },
+                                "condicion": { "type": "string" }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+    }
+
+}

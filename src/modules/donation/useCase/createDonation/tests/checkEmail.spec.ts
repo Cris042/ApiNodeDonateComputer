@@ -33,7 +33,7 @@ describe("criar doação, verificar se o E-mail e valido", () =>
       .set("Accept", "application/json")
       .expect(400);
 
-      expect(response.body.message).toBe("E-mail invalido!");
+      expect(response.body.errorMessage).toBe("E-mail invalido!");
   });
 
  

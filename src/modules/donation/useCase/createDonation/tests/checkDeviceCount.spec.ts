@@ -33,7 +33,7 @@ describe("criar doação, verificar se o numero de devices esta iqual a quantida
       .set("Accept", "application/json")
       .expect(400);
 
-      expect(response.body.message).toBe
+      expect(response.body.errorMessage).toBe
       (
         "A quantidade de equipamentos : 2  não está de acordo com as informações de equipamentos enviados : 1"
       );

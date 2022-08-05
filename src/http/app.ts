@@ -1,30 +1,27 @@
 import "reflect-metadata";
 import "express-async-errors";
+import * as dotenv from 'dotenv';
+import swaggerUi from "swagger-ui-express";
 import express, { NextFunction, Request, Response } from "express";
 
 import { routes } from "./routes/index";
 import { appError } from "@errors/appError";
+import swaggerFile from "@swagger";
+
+//criando o servidor e aplicando as routas, variaves de ambiente, headers e os tratamentos de erros
+var cors = require('cors');
+dotenv.config()
 
 const App = express();
-var cors = require('cors');
+
+require('dotenv').config();
 
 App.use(cors());
+App.use(cors({ origin: '*' }));
+App.use(cors({ exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'], }));
+App.use(cors({ credentials: true, }));
 
-App.use(cors
-({
-  origin: '*'
-}));
-
-App.use(cors
-({
-  exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
-}));
-
-App.use(cors
-({
-  credentials: true,
-}));
-
+App.use("/docs", swaggerUi.serve, swaggerUi.setup( swaggerFile ));
 App.use( express.json() );
 App.use( routes );
 
@@ -38,7 +35,7 @@ App.use
           return  response.status(err.statusCode).json
           ({
             erro: err.error,
-            message: err.message,     
+            errorMessage: err.errorMessage,     
             requiredFields: err.requiredFields,
           })            
       }
@@ -46,7 +43,7 @@ App.use
       {
   
         status: "error",
-        message: `Internal server error - ${err.message}`,
+        errorMessage: `Internal server error - ${err.message}`,
   
       });
   

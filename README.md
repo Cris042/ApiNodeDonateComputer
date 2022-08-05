@@ -6,6 +6,7 @@
 
 - [x] Node
 - [x] Jest
+- [x] SOLID
 ## Depedencias globais necessarias 💻
 
 - [x] node 
@@ -23,5 +24,9 @@
 ## Testa projeto
 
 1. Run `yarn test`.<br />
+
+## Documentação da Api 
+  -> http://localhost:3000/docs
+  -> https://shrouded-cove-82832.herokuapp.com/docs
 
 

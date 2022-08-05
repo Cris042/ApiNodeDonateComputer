@@ -2,6 +2,7 @@ import { ICreateDevicesDTO } from "@modules/donation/dtos/ICreateDevicesDTO";
 import { prisma } from '@database/prismaClient';
 import { appError } from "@errors/appError";
 
+//função para verificar se o campo devices obrigatorios foram preencidos
 function  HandleCheckRequiredFields( devices: ICreateDevicesDTO[] ) 
 {
   let requiredFields: string[] = [];
@@ -12,6 +13,7 @@ function  HandleCheckRequiredFields( devices: ICreateDevicesDTO[] )
   return requiredFields;
 }
 
+//função para verificar se os campos [ type e condicion ] foram preencidos e verificar se eles estão no formato certo 
 function  HandleCheckDevicesTypes( devices: ICreateDevicesDTO[] ) 
 {
   const devicesTypes = [ "notebook", "desktop", "netbook", "monitor", "impressora","scanner"];
@@ -57,6 +59,7 @@ class CreateDevicesUseCase
 
     HandleCheckDevicesTypes( devices );
 
+    //criando os devices no banco de dados
     let response = [];
 
     for (let item in devices) 

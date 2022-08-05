@@ -1,14 +1,15 @@
 export class appError 
 {
-    public readonly message: string;
+    public readonly errorMessage: string;
     public readonly statusCode: number;
     public readonly error: boolean;
     public readonly requiredFields?: string;
   
-    constructor( message: string, requiredFields? , error = true, statusCode = 400) 
+    // class responsavel para fazer o tratamentos de error 
+    constructor( errorMessage: string, requiredFields? , error = true, statusCode = 400) 
     {
       this.error = error;
-      this.message = message;
+      this.errorMessage = errorMessage;
       this.statusCode = statusCode;
       this.requiredFields = requiredFields;
     }

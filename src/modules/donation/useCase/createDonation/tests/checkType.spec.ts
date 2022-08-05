@@ -33,7 +33,7 @@ describe("criar doação, verificar se o tipo do device", () =>
       .set("Accept", "application/json")
       .expect(400);
 
-    expect(response.body.message).toBe("smartwatch  não e um tipo de device valido!");
+    expect(response.body.errorMessage).toBe("smartwatch  não e um tipo de device valido!");
   });
 
 

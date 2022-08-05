@@ -29,7 +29,7 @@ describe("criar doação, verificar se existe algun device", () =>
       .set("Accept", "application/json")
       .expect(400);
 
-      expect(response.body.message).toBe
+      expect(response.body.errorMessage).toBe
       (
         "Todos os campos obrigatórios de doações devem ser informados"
       );
