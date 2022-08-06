@@ -1,25 +1,27 @@
 import { App } from "@http/app";
 import request from 'supertest';
 
-describe("criar doação, verificar se existe algun device", () => 
+describe("criar doação, verificar se existe algun campo vazio", () => 
 {
-  it("retornar o status 400 quando a quantidades de device for igual a 0", async () => 
+  it("retornar o status 400 quando existir algun campo vazio", async () => 
   {
     const donation = 
     {
       name: "teste",
       email: "teste@email.com",
-      phone: "(77) 7777-7777",
-      zip: "7777-777",
       city: "Westminster",
       state: "Londres",
       streetAddress: "Baker Street",
       number: "221",
       complement: "b",
       neighborhood: "centro",
-      deviceCount: 0,
+      deviceCount: 1,
       devices: 
       [
+        {
+          type: "notebook",
+          condicion: "working",
+        }
       ]
     };
 
@@ -29,10 +31,9 @@ describe("criar doação, verificar se existe algun device", () =>
       .set("Accept", "application/json")
       .expect(400);
 
-      expect(response.body.errorMessage).toBe
-      (
-        "Todos os campos obrigatórios de doações devem ser informados"
+      expect(response.body.errorMessage).toBe(
+        "Todos os campos obrigatórios devem ser informados!"
       );
   });
-
+  
 });

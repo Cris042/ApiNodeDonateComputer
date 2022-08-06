@@ -6,7 +6,6 @@
 
 - [x] Node
 - [x] Jest
-- [x] SOLID
 ## Depedencias globais necessarias 💻
 
 - [x] node 

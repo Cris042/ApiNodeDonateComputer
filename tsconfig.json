@@ -6,7 +6,7 @@
     "baseUrl": "./src",
     "paths": 
     {
-      "@modules/*": ["modules/*"],
+      "@donation/*": ["donation/*"],
       "@http/*": ["http/*"],
       "@errors/*" : ["errors/*"],
       "@database/*": ["database/*"],
