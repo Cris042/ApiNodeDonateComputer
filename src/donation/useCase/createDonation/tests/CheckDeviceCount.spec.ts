@@ -22,7 +22,7 @@ describe("criar doação, verificar se o numero de devices esta iqual a quantida
       [
         {
           type: "notebook",
-          condicion: "working",
+          condition: "working",
         }
       ]
     };

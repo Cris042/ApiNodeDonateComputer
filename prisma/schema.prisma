@@ -47,7 +47,7 @@ model Devices {
   id_donation String
   donation Donation @relation(fields: [id_donation], references: [id])
   type String 
-  condicion String
+  condition String
   created_at DateTime @default(now())
  
   @@map("devices")

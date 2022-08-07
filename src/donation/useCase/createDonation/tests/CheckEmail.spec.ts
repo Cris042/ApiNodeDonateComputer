@@ -22,7 +22,7 @@ describe("criar doação, verificar se o E-mail e valido", () =>
       [
         {
           type: "notebook",
-          condicion: "working",
+          condition: "working",
         }
       ]
     };
@@ -35,6 +35,5 @@ describe("criar doação, verificar se o E-mail e valido", () =>
 
       expect(response.body.errorMessage).toBe("E-mail invalido!");
   });
-
  
 });

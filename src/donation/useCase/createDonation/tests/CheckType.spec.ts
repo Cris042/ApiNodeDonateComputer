@@ -22,7 +22,7 @@ describe("criar doação, verificar se o tipo do device", () =>
       [
         {
           type: "smartwatch",
-          condicion: "working",
+          condition: "working",
         }
       ]
     };

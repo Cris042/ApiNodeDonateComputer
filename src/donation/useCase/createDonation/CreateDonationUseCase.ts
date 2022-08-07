@@ -65,7 +65,7 @@ async function HandleCheckInputType( donation : ICreatedonationDTO )
 
 }
 
-//função para verificar se os campos [ type e condicion ] foram preencidos e verificar se eles estão no formato certo 
+//função para verificar se os campos [ type e condition ] foram preencidos e verificar se eles estão no formato certo 
 function  HandleCheckDevicesTypes( donation: ICreatedonationDTO ) 
 {
   const devicesTypes = [ "notebook", "desktop", "netbook", "monitor", "impressora","scanner"];
@@ -75,8 +75,8 @@ function  HandleCheckDevicesTypes( donation: ICreatedonationDTO )
   {
     if( !devicesTypes.includes( device.type.toLocaleLowerCase() ) ) 
       throw new appError( device.type.toLocaleLowerCase() + "  não e um tipo de device valido!");
-    if( !devicesCondicion.includes( device.condicion.toLocaleLowerCase() ) )
-      throw new appError( device.condicion.toLocaleLowerCase() + "  não e uma codinção de device valido!");
+    if( !devicesCondicion.includes( device.condition.toLocaleLowerCase() ) )
+      throw new appError( device.condition.toLocaleLowerCase() + "  não e uma codinção de device valido!");
   }
 }
 
@@ -165,7 +165,7 @@ class CreateDonationUseCase
     const userExists = await prisma.user.findFirst({
       where: {
         phone: {
-          equals: phone,
+          equals: donation.phone.replace(/\D+/g, ''),
           mode: 'insensitive',
         },
       },
@@ -179,7 +179,7 @@ class CreateDonationUseCase
         {
           name: donation.name,
           email: donation.email != null ? donation.email : "",
-          phone: donation.phone,
+          phone: donation.phone.replace(/\D+/g, ''),
         },
       })
        
@@ -191,8 +191,8 @@ class CreateDonationUseCase
     const objDonation = await prisma.donation.create({
       data: 
       {
-        key_user: phone,
-        zip: donation.zip,
+        key_user: donation.phone.replace(/\D+/g, ''),
+        zip: donation.zip.replace(/\D+/g, ''),
         city: donation.city,
         state: donation.state,
         streetAddress: donation.streetAddress,
@@ -214,8 +214,8 @@ class CreateDonationUseCase
         data: 
         {    
           id_donation : objDonation.id,
-          type: devices[item].type,
-          condicion: devices[item].condicion,   
+          type: devices[item].type.toLocaleLowerCase(),
+          condition: devices[item].condition.toLocaleLowerCase(),   
         },
       });
 

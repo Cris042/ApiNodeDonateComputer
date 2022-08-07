@@ -75,7 +75,7 @@
                             [
                               {
                                 "type": { "type": "string" },
-                                "condicion": { "type": "string" }
+                                "condition": { "type": "string" }
                               }
                             ]
                           }

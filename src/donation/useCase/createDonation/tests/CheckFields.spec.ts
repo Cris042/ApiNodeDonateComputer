@@ -20,7 +20,7 @@ describe("criar doação, verificar se existe algun campo vazio", () =>
       [
         {
           type: "notebook",
-          condicion: "working",
+          condition: "working",
         }
       ]
     };

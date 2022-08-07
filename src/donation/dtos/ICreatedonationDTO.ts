@@ -1,7 +1,7 @@
 type device = 
 {
     type: string;
-    condicion: string;
+    condition: string;
 };
   
 interface ICreatedonationDTO

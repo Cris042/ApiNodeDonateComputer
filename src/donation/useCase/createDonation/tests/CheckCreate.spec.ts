@@ -22,7 +22,7 @@ describe("criar doação", () =>
       [
         {
           type: "notebook",
-          condicion: "working",
+          condition: "working",
         }
       ]
     };

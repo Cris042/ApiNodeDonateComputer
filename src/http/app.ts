@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import swaggerUi from "swagger-ui-express";
 import express, { NextFunction, Request, Response } from "express";
 
-import { routes } from "./routes/index";
+import { routes } from "./routes";
 import { appError } from "@errors/appError";
 import swaggerFile from "@swagger";
 
