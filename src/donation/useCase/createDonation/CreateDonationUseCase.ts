@@ -32,7 +32,6 @@ async function HandleCheckInputType( donation : ICreatedonationDTO )
   let schema = Yup.object().shape
   ({
     name: Yup.string().min(3),
-    email: Yup.string().notRequired(),
     phone: Yup.string().min(10).max(18),
     zip: Yup.string().min(8).max(10),
     city: Yup.string().min(3),
@@ -49,9 +48,9 @@ async function HandleCheckInputType( donation : ICreatedonationDTO )
     await schema.validate
     (
       { 
-        name: donation.name.trim(), email : donation.email.trim(), phone : donation.phone.trim(), zip : donation.zip.trim(), 
+        name: donation.name.trim(), phone : donation.phone.trim(), zip : donation.zip.trim(), 
         city : donation.city.trim(), state : donation.state.trim(), streetAddress : donation.streetAddress.trim(), number : donation.number, 
-        complement : donation.complement.trim(),neighborhood : donation.neighborhood.trim(), deviceCount: donation.deviceCount 
+        complement : donation.complement != null ? donation.complement.trim() : donation.complement ,neighborhood : donation.neighborhood.trim(), deviceCount: donation.deviceCount 
       }
     );
   }
@@ -68,7 +67,7 @@ async function HandleCheckInputType( donation : ICreatedonationDTO )
 //função para verificar se os campos [ type e condition ] foram preencidos e verificar se eles estão no formato certo 
 function  HandleCheckDevicesTypes( donation: ICreatedonationDTO ) 
 {
-  const devicesTypes = [ "notebook", "desktop", "netbook", "monitor", "impressora","scanner"];
+  const devicesTypes = [ "notebook", "desktop", "netbook", "monitor", "impressora", "scanner", "printer"];
   const devicesCondicion = [ "working", "notworking", "broken"];
 
   for (let device of donation.devices) 

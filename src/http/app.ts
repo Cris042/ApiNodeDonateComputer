@@ -34,7 +34,7 @@ App.use
       {          
           return  response.status(err.statusCode).json
           ({
-            erro: err.error,
+            error: err.error,
             errorMessage: err.errorMessage,     
             requiredFields: err.requiredFields,
           })            
